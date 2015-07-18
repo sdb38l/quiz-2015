@@ -5,6 +5,13 @@
  */
 
 var app = require('../app');
+var fs = require("fs");
+var https = require("https");
+var options = {
+  key: fs.readFileSync('certs/quiz-2015-key.pem').toString(),
+  cert: fs.readFileSync('certs/quiz-2015-cert.pem').toString()
+};
+
 var debug = require('debug')('quiz:server');
 var http = require('http');
 
@@ -20,6 +27,11 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+var serverSecure = https.createServer(options, app);
+serverSecure.listen(8443, function() {
+  debug('Express server listening on port ' + server.address().port);
+});
 
 /**
  * Listen on provided port, on all network interfaces.
