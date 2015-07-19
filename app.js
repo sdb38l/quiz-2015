@@ -29,6 +29,18 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Auto logout
+app.use(function(req, res, next) {
+  var horaActual = new Date();
+  if (req.session && req.session.time &&
+       (horaActual.getTime() > req.session.time + 5000)) {
+    delete req.session.user;
+  } 
+  req.session.time = horaActual.getTime();
+  next();
+});
+
+
 // Helpers dinámicos
 app.use(function(req, res, next) {
 
@@ -41,6 +53,7 @@ app.use(function(req, res, next) {
   res.locals.session = req.session;
   next();
 });
+
 
 app.use('/', routes);
 
