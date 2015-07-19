@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
   var horaActual = new Date();
   if (req.session && req.session.time &&
-       (horaActual.getTime() > req.session.time + 5000)) {
+       (horaActual.getTime() > req.session.time + 120000)) {
     delete req.session.user;
   } 
   req.session.time = horaActual.getTime();
